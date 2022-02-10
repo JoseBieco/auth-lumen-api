@@ -13,7 +13,7 @@ class AuthorController extends Controller
      */
     function getAllAuthors()
     {
-        return response($status = 200)->json(Author::all());
+        return response()->json(Author::all());
     }
 
     /**
