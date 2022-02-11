@@ -31,6 +31,8 @@ class AuthorController extends Controller
      */
     function create(Request $request)
     {
+        $this->validate($request, $this->validateData());
+
         $author = Author::create($request->all());
 
         return response()->json($author, 201);
@@ -58,5 +60,16 @@ class AuthorController extends Controller
     {
         Author::findOrFail($id)->delete();
         return response('Deleted Successfully', 200);
+    }
+
+    /**
+     * Return the validations of the obligatory fields from Author model
+     */
+    private function validateData()
+    {
+        return [
+            'name' => 'required',
+            'email' => 'required|email|unique:authors'
+        ];
     }
 }
