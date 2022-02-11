@@ -18,7 +18,7 @@ $router->get('/', function () use ($router) {
 });
 
 
-$router->group(['prefix' => 'api'], function () use ($router) {
+$router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
     $router->get('authors', ['uses' => 'AuthorController@getAllAuthors']);
 
     $router->get('authors/{id}', ['uses' => 'AuthorController@getAuthorById']);
