@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -33,5 +34,42 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => 'User Registration Failed!'], 409);
         }
+    }
+
+    /**
+     * Attempt to authenticate the user and retrieve a JWT.
+     * Note: The API is stateless. This method _only_ returns a JWT. There is not an
+     * indicator that a user is logged in otherwise (no sessions).
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function login(Request $request)
+    {
+        // Are the proper fields present?
+        $this->validate($request, [
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
+        $credentials = $request->only(['email', 'password']);
+        if (!$token = Auth::attempt($credentials)) {
+            // Login has failed
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        return $this->respondWithToken($token);
+    }
+
+    /**
+     * Helper function to format the response with the token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => Auth::factory()->getTTL() * 60
+        ], 200);
     }
 }
