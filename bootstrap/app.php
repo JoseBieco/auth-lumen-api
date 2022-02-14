@@ -9,6 +9,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
 // php -S localhost:8000 -t public
+// php artisan jwt:secret
 
 /*
 |--------------------------------------------------------------------------
@@ -96,6 +97,7 @@ $app->routeMiddleware([
 // $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
