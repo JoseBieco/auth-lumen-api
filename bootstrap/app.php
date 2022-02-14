@@ -9,6 +9,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
 // php -S localhost:8000 -t public
+
+// composer require tymon/jwt-auth --ignore-platform-reqs
 // php artisan jwt:secret
 
 /*
