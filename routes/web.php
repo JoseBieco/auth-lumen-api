@@ -31,16 +31,4 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->put('/{id}/email', ['uses' => 'UserController@changeEmail']);
         $router->put('/{id}/password', ['uses' => 'AuthController@resetPassword']);
     });
-
-    $router->group(['prefix' => 'authors', 'middleware' => 'auth'], function () use ($router) {
-        $router->get('/', ['uses' => 'AuthorController@getAllAuthors']);
-
-        $router->get('/{id}', ['uses' => 'AuthorController@getAuthorById']);
-
-        $router->post('/', ['uses' => 'AuthorController@create']);
-
-        $router->delete('/{id}', ['uses' => 'AuthorController@delete']);
-
-        $router->put('/{id}', ['uses' => 'AuthorController@update']);
-    });
 });
