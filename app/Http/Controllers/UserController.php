@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -66,5 +67,27 @@ class UserController extends Controller
     private function validUpdate(Request $request): bool
     {
         return $request->input('password') || $request->input('email');
+    }
+
+    /**
+     * Update the email of the current id entity
+     */
+    function changeEmail($id, Request $request)
+    {
+        $this->validate($request, ['email' => 'required|email|unique:users']);
+
+        try {
+            if (Auth::user()->id != $id) {
+                return response()->json(['message' => "You don't have permission to do this action!"], 403);
+            }
+            $user = User::findOrFail($id);
+
+            $user->email = $request->input('email');
+            $user->save();
+
+            return response(['message' => 'Email changed successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Fail to change the email!'], 418);
+        }
     }
 }
