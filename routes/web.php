@@ -26,6 +26,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->group(['prefix' => 'users'], function () use ($router) {
         $router->get('/', ['uses' => 'UserController@getAllUsers']);
+        $router->get('/{id}', ['uses' => 'UserController@getById']);
+        $router->put('/{id}', ['uses' => 'UserController@update']);
     });
 
     $router->group(['prefix' => 'authors', 'middleware' => 'auth'], function () use ($router) {
