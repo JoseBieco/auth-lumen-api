@@ -78,4 +78,26 @@ class AuthController extends Controller
             'password' => 'required|min:6'
         ];
     }
+
+    /**
+     * Reset the password for entity related to the id
+     */
+    function resetPassword($id, Request $request)
+    {
+        $this->validate($request, ['password' => 'required|min:6']);
+
+        try {
+            if (Auth::user()->id != $id) {
+                return response()->json(['message' => "You don't have permission to do this action!"], 403);
+            }
+            $user = User::findOrFail($id);
+
+            $user->password = app('hash')->make($request->input('password'));
+            $user->save();
+
+            return response(['message' => 'Password changed successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Fail to change the password!'], 418);
+        }
+    }
 }
